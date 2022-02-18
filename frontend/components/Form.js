@@ -6,34 +6,32 @@ export function Form(props) {
   console.log(props.newQuiz)
 
   const onChange = evt => {
-
-    if (evt.target.id === 'newQuestion') {
-      props.inputChange(evt.target.value)
-    } else if (evt.target.id === 'newTrueAnswer') {
-      props.inputChange2(evt.target.value)
-    } else if (evt.target.id === 'newFalseAnswer') {
-      props.inputChange3(evt.target.value)
-    } else {
-      console.log('Where are you even typing..?')
-    }
+    const { id, value } = evt.target
+    const newQ = {...props.form, [id]: value}
+    props.inputChange(newQ)
   }
-
-  const quizQuestion = props.newQuiz.question_text
 
   const onSubmit = evt => {
     evt.preventDefault();
+    const questionInput = document.querySelector('#newQuestion')
+    const trueAnswerInput = document.querySelector('#newTrueAnswer')
+    const falseAnswerInput = document.querySelector('#newFalseAnswer')
 
-    props.setMessage(quizQuestion)
-    
-    const newQuestion = document.querySelector('#newQuestion')
-    const newTrueAnswer = document.querySelector('#newTrueAnswer')
-    const newFalseAnswer = document.querySelector('#newFalseAnswer')
-    newQuestion.value = ''
-    newTrueAnswer.value = ''
-    newFalseAnswer.value = ''
+    questionInput.value = ''
+    trueAnswerInput.value = ''
+    falseAnswerInput.value = ''
 
-    props.postQuiz(props.newQuiz)
+    props.postQuiz({
+      question_text: props.form.newQuestion,
+      true_answer_text: props.form.newTrueAnswer,
+      false_answer_text: props.form.newFalseAnswer
+    })
   }
+
+  const disabled =
+  props.form.newQuestion.trim('').length > 0 &&
+  props.form.newTrueAnswer.trim('').length > 0 &&
+  props.form.newFalseAnswer.trim('').length > 0
 
   return (
     <form id="form" onSubmit={onSubmit}>
@@ -41,19 +39,9 @@ export function Form(props) {
       <input required maxLength={50} onChange={onChange} id="newQuestion" placeholder="Enter question" />
       <input required maxLength={50} onChange={onChange} id="newTrueAnswer" placeholder="Enter true answer" />
       <input required maxLength={50} onChange={onChange} id="newFalseAnswer" placeholder="Enter false answer" />
-      <button id="submitNewQuizBtn">Submit new quiz</button>
+      <button disabled={!disabled} id="submitNewQuizBtn">Submit new quiz</button>
     </form>
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    newQuiz: {
-      question_text: state.form.newQuestion,
-      true_answer_text: state.form.newTrueAnswer,
-      false_answer_text: state.form.newFalseAnswer }
-  }
-}
-
-
-export default connect(mapStateToProps, actionCreators)(Form)
+export default connect(st => st, actionCreators)(Form)

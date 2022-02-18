@@ -8,6 +8,7 @@ const initialWheelState = {
 
 function wheel(state = initialWheelState, action) {
   switch(action.type) {
+    
     case types.MOVE_CLOCKWISE:
       return {
         ...state,
@@ -37,25 +38,10 @@ function wheel(state = initialWheelState, action) {
   }
 }
 
-// const initialQuizState = {
-//   quiz_id: 'LWKA',
-//   question: 'What is Closure?',
-//   answers: [
-//     {
-//       answer_id: '121fa',
-//       text: 'A function',
-//     },
-//     {
-//       answer_id: 'awdaw51',
-//       text: 'An Elephant',
-//     }
-//   ]
-// }
-
 const initialQuizState = null
 function quiz(state = initialQuizState, action) {
   switch(action.type) {
-    
+
     case types.SET_QUIZ_INTO_STATE:
       return action.payload
 
@@ -97,28 +83,13 @@ const initialFormState = {
 
 function form(state = initialFormState, action) {
   switch(action.type) {
+
     case types.INPUT_CHANGE:
-      return {
-        ...state,
-        newQuestion: action.payload
-      }
-    case types.INPUT_CHANGE2:
-      return {
-        ...state,
-        newTrueAnswer: action.payload
-      }
-    case types.INPUT_CHANGE3:
-      return {
-        ...state,
-        newFalseAnswer: action.payload
-      }
+      return {...state, ...action.payload}
+    
     case types.RESET_FORM:
-      return {
-        ...state,
-        newQuestion: '',
-        newTrueAnswer: '',
-        newFalseAnswer: ''
-      }
+      return {...state, initialFormState}
+
     default:
       return state
   }

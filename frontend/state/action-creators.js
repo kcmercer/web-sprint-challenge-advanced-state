@@ -99,16 +99,17 @@ export function postAnswer({quiz_id, answer_id}) {
   }
 }
 
-export function postQuiz(newQuiz) {
+export function postQuiz({question_text, true_answer_text, false_answer_text}) {
   return function (dispatch) {
     // On successful POST:
     // - Dispatch the correct message to the the appropriate state
     // - Dispatch the resetting of the form
 
-    axios.post('http://localhost:9000/api/quiz/new', newQuiz)
+    axios.post('http://localhost:9000/api/quiz/new', {question_text, true_answer_text, false_answer_text})
       .then(resp => {
         console.log(resp.data)
-        dispatch({type: types.RESET_FORM})
+        dispatch(setMessage(`Congrats: "${resp.data.question}" is a great question!`))
+        dispatch(resetForm())
       }) .catch (error => {
         console.log(error)
       })
