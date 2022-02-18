@@ -1,6 +1,6 @@
 // ❗ You don't need to add extra reducers to achieve MVP
 import { combineReducers } from 'redux'
-import { MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE, INPUT_CHANGE, RESET_FORM, WHEEL_CLOCKWISE_RESET, WHEEL_COUNTERCLOCKWISE_RESET } from './action-types';
+import * as types from './action-types';
 
 const initialWheelState = {
   wheelCounter: 0
@@ -8,25 +8,25 @@ const initialWheelState = {
 
 function wheel(state = initialWheelState, action) {
   switch(action.type) {
-    case MOVE_CLOCKWISE:
+    case types.MOVE_CLOCKWISE:
       return {
         ...state,
         wheelCounter: state.wheelCounter + 1
       }
     
-    case MOVE_COUNTERCLOCKWISE:
+    case types.MOVE_COUNTERCLOCKWISE:
       return {
         ...state,
         wheelCounter: state.wheelCounter - 1
       }
 
-    case WHEEL_CLOCKWISE_RESET:
+    case types.WHEEL_CLOCKWISE_RESET:
       return {
         ...state,
         wheelCounter: 0
       }
 
-      case WHEEL_COUNTERCLOCKWISE_RESET:
+      case types.WHEEL_COUNTERCLOCKWISE_RESET:
         return {
           ...state,
           wheelCounter: 5
@@ -37,9 +37,15 @@ function wheel(state = initialWheelState, action) {
   }
 }
 
-const initialQuizState = null
+const initialQuizState = []
 function quiz(state = initialQuizState, action) {
-  return state
+  switch(action.type) {
+    case types.SET_QUIZ_INTO_STATE:
+      return [...state, action.payload], console.log(state)
+
+    default:
+      return state
+  }
 }
 
 const initialSelectedAnswerState = null
@@ -47,10 +53,23 @@ function selectedAnswer(state = initialSelectedAnswerState, action) {
   return state
 }
 
-const initialMessageState = ''
-function infoMessage(state = initialMessageState, action) {
-  return state
+const initialMessageState = {
+  message: '',
 }
+
+function infoMessage(state = initialMessageState, action) {
+  switch(action.type) {
+    case types.SET_INFO_MESSAGE:
+      return {
+        ...state,
+        message: action.payload + 'is a great question!'
+      }
+
+    default:
+      return state
+        
+      }
+  }
 
 const initialFormState = {
   newQuestion: '',
@@ -60,15 +79,23 @@ const initialFormState = {
 
 function form(state = initialFormState, action) {
   switch(action.type) {
-    case INPUT_CHANGE:
+    case types.INPUT_CHANGE:
       return {
         ...state,
-        newQuestion: action.payload.newQuestion,
-        newTrueAnswer: action.payload.newTrueAnswer,
-        newFalseAnswer: action.payload.newFalseAnswer
-        
+        newQuestion: action.payload
       }
-    case RESET_FORM:
+      case types.INPUT_CHANGE2:
+        return {
+          ...state,
+          newTrueAnswer: action.payload
+
+        }
+        case types.INPUT_CHANGE3:
+          return {
+            ...state,
+            newFalseAnswer: action.payload
+          }
+    case types.RESET_FORM:
       return {
         ...state,
         newQuestion: '',

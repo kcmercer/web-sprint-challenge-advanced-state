@@ -1,7 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux';
+import { fetchQuiz } from '../state/action-creators';
 
 export function Quiz(props) {
+  const grabQuiz = () => {
+    console.log(props.quiz)
+    props.fetchQuiz()
+  }
   return (
     <div id="wrapper">
       {
@@ -26,7 +31,7 @@ export function Quiz(props) {
               </div>
             </div>
 
-            <button id="submitAnswerBtn">Submit answer</button>
+            <button  onClick={grabQuiz} id="submitAnswerBtn">Submit answer</button>
           </>
         ) : 'Loading next quiz...'
       }
@@ -34,10 +39,10 @@ export function Quiz(props) {
   )
 }
 
-// const mapStateToProps = (state) => {
-//   return {
+const mapStateToProps = (state) => {
+  return {
+    quiz: state.quiz
+  }
+}
 
-//   }
-// }
-
-export default connect(null)(Quiz);
+export default connect(mapStateToProps, { fetchQuiz })(Quiz);
