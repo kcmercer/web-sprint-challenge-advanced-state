@@ -20,15 +20,17 @@ export function wheelCounterClockwiseReset() {
 }
 
 // Quiz Actions
-export function selectAnswer(answer) {
-  return(console.log(answer), {type: types.SET_SELECTED_ANSWER, payload: answer})
+export function selectAnswer(answerId) {
+  return({type: types.SET_SELECTED_ANSWER, payload: answerId})
 }
 
 export function setMessage(value) {
   return ({type: types.SET_INFO_MESSAGE, payload: value})
 }
 
-export function setQuiz() { }
+export function setQuiz(question) {
+  return ({type: types.SET_QUIZ_INTO_STATE, payload: question})
+}
 
 // Form Actions
 export function inputChange(value) {
@@ -57,12 +59,14 @@ export function fetchQuiz() {
     axios.get('http://localhost:9000/api/quiz/next')
     .then(resp => {
       console.log(resp.data)
-      dispatch({ type: types.SET_QUIZ_INTO_STATE, payload: resp.data})
+      dispatch(setQuiz(resp.data))
     }) .catch (error => {
       console.log(error)
     })
   }
 }
+
+// BAD dont do this
 
 // export const fetchQuiz = () => dispatch => {
 
@@ -75,12 +79,23 @@ export function fetchQuiz() {
 //     })
 // }
 
-export function postAnswer() {
+export function postAnswer({quiz_id, answer_id}) {
   return function (dispatch) {
     // On successful POST:
     // - Dispatch an action to reset the selected answer state
     // - Dispatch an action to set the server message to state
     // - Dispatch the fetching of the next quiz
+
+    axios.post('http://localhost:9000/api/quiz/answer', { quiz_id, answer_id})
+      .then(resp => {
+        console.log(resp)
+        dispatch(setMessage(resp.data.message))
+        dispatch(selectAnswer(null))
+        dispatch(setQuiz(null))
+        dispatch(fetchQuiz())
+      }) .catch (error => {
+        console.log(error)
+      })
   }
 }
 

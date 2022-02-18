@@ -1,54 +1,50 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
-import { fetchQuiz, selectAnswer, setMessage } from '../state/action-creators';
+import { fetchQuiz, selectAnswer, setMessage, postAnswer } from '../state/action-creators';
 
 export function Quiz(props) {
-  const grabQuiz = () => {
-    props.fetchQuiz()
+
+  const { quiz } = props
+
+  useEffect(
+    () => {
+      props.fetchQuiz()
+    }, [])
+
+  const handleSelect = id => {
+    props.selectAnswer(id)
   }
 
-  let quizCheck = props.quiz !== '';
+  const handleSubmit = evt => {
+    evt.preventDefault();
 
-  const selectedAnswerArray = Object.values(props.selectedAnswer)
-  const selectedAnswerString = selectedAnswerArray.toString()
-
-  let answerCheck = selectedAnswerString !== '';
-
-  const handleSelect = evt => {
-    props.selectAnswer(evt.target.value)
-
-    if (selectedAnswerString == props.quiz.answers[0].text) {
-      props.setMessage('That is correct')
-    } else {
-      props.setMessage('That is a shame')
-    }
+    props.postAnswer({ quiz_id: props.quiz.quiz_id, answer_id: props.selectedAnswer})
   }
 
   return (
     <div id="wrapper">
       {
-        quizCheck ==
-        true ? (
+        quiz ? (
           <>
-            <h2>{props.quiz.question}</h2>
+            <h2>{quiz.question}</h2>
 
             <div id="quizAnswers">
-              <div className={selectedAnswerString == props.quiz.answers[0].text ? 'answer selected' : 'answer'} value={props.quiz.answers[0].text}>
-              {props.quiz.answers[0].text}
-                <button value={props.quiz.answers[0].text} onClick={handleSelect}>
-                  {selectedAnswerString === props.quiz.answers[0].text ? 'SELECTED' : 'Select'}
+              <div className={`${props.selectedAnswer == quiz.answers[0].answer_id ? 'answer selected' : 'answer'}`}>
+              {quiz.answers[0].text}
+                <button onClick={() => handleSelect(quiz.answers[0].answer_id)}>
+                  {props.selectedAnswer === quiz.answers[0].answer_id ? 'SELECTED' : 'Select'}
                 </button>
               </div>
 
-              <div className={selectedAnswerString === props.quiz.answers[1].text ? 'answer selected' : 'answer'} value={props.quiz.answers[1].text}>
-              {props.quiz.answers[1].text}
-                <button value={props.quiz.answers[1].text} onClick={handleSelect}>
-                {selectedAnswerString == props.quiz.answers[1].text ? 'SELECTED' : 'Select'}
+              <div className={`${props.selectedAnswer == quiz.answers[1].answer_id ? 'answer selected' : 'answer'}`}>
+              {quiz.answers[1].text}
+                <button onClick={() => handleSelect(quiz.answers[1].answer_id)}>
+                {props.selectedAnswer == quiz.answers[1].answer_id ? 'SELECTED' : 'Select'}
                 </button>
               </div>
             </div>
 
-            <button disabled={answerCheck === true ? false : true} onClick={grabQuiz} id="submitAnswerBtn">Submit answer</button>
+            <button disabled={!props.selectedAnswer} onClick={handleSubmit} id="submitAnswerBtn">Submit answer</button>
           </>
         ) : 'Loading next quiz...'
       }
@@ -63,4 +59,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { fetchQuiz, selectAnswer, setMessage })(Quiz);
+export default connect(mapStateToProps, { fetchQuiz, selectAnswer, setMessage, postAnswer })(Quiz);
