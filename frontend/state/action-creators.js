@@ -48,32 +48,32 @@ export function resetForm() {
 }
 
 // ❗ Async action creators
-// export function fetchQuiz() {
-//   return function (dispatch) {
-//     // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
-//     // On successful GET:
-//     // - Dispatch an action to send the obtained quiz to its state
+export function fetchQuiz() {
+  return function (dispatch) {
+    // First, dispatch an action to reset the quiz state (so the "Loading next quiz..." message can display)
+    // On successful GET:
+    // - Dispatch an action to send the obtained quiz to its state
 
-//     axios.get('http://localhost:9000/api/quiz/next')
-//     .then(resp => {
-//       console.log(resp.data)
-//       dispatch({ type: types.SET_QUIZ_INTO_STATE, payload: resp.data})
-//     }) .catch (error => {
-//       console.log(error)
-//     })
-//   }
-// }
-
-export const fetchQuiz = () => dispatch => {
-
-      axios.get('http://localhost:9000/api/quiz/next')
+    axios.get('http://localhost:9000/api/quiz/next')
     .then(resp => {
       console.log(resp.data)
       dispatch({ type: types.SET_QUIZ_INTO_STATE, payload: resp.data})
     }) .catch (error => {
       console.log(error)
     })
+  }
 }
+
+// export const fetchQuiz = () => dispatch => {
+
+//       axios.get('http://localhost:9000/api/quiz/next')
+//     .then(resp => {
+//       console.log(resp.data)
+//       dispatch({ type: types.SET_QUIZ_INTO_STATE, payload: resp.data})
+//     }) .catch (error => {
+//       console.log(error)
+//     })
+// }
 
 export function postAnswer() {
   return function (dispatch) {
