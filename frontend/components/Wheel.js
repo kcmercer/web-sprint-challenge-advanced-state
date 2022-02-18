@@ -2,16 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux';
 
 // Actions
-import { moveClockwise, moveCounterClockwise } from '../state/action-creators';
+import { moveClockwise, moveCounterClockwise, wheelCounterClockwiseReset, wheelClockwiseReset } from '../state/action-creators';
 
 export function Wheel(props) {
-  console.log(props.wheel)
-
+  
   const handleClockwise = () => {
     if (props.wheel >= 0 && props.wheel <= 4) {
       props.moveClockwise()
     } else {
-      console.log('You cant move Clockwise')
+      props.wheelClockwiseReset()
     }
   }
 
@@ -19,7 +18,7 @@ export function Wheel(props) {
     if (props.wheel >= 1 && props.wheel <= 5) {
       props.moveCounterClockwise()
     } else {
-      console.log('You cant move Counter Clockwise')
+      props.wheelCounterClockwiseReset()
     }
   }
 
@@ -47,4 +46,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { moveClockwise, moveCounterClockwise})(Wheel);
+export default connect(mapStateToProps, { moveClockwise, moveCounterClockwise, wheelCounterClockwiseReset, wheelClockwiseReset})(Wheel);

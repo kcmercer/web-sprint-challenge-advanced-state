@@ -1,17 +1,20 @@
 // ❗ You don't need to add extra action creators to achieve MVP
 import * as types from './action-types';
 
-// export const MOVE_CLOCKWISE = 'MOVE_CLOCKWISE';
-// export const MOVE_COUNTERCLOCKWISE = 'MOVE_COUNTERCLOCKWISE';
-// export const INPUT_CHANGE = 'INPUT_CHANGE';
-// export const RESET_FORM = 'RESET_FORM';
-
-export function moveClockwise() {
-  return ({type: types.MOVE_CLOCKWISE})
+export function moveClockwise(x) {
+  return ({type: types.MOVE_CLOCKWISE, payload: x})
 }
 
 export function moveCounterClockwise() {
   return ({type: types.MOVE_COUNTERCLOCKWISE})
+}
+
+export function wheelClockwiseReset() {
+  return({type: types.WHEEL_CLOCKWISE_RESET})
+}
+
+export function wheelCounterClockwiseReset() {
+  return({type: types.WHEEL_COUNTERCLOCKWISE_RESET})
 }
 
 export function selectAnswer() { }

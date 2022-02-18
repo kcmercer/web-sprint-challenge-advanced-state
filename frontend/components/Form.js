@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as actionCreators from '../state/action-creators'
-import axios from 'axios';
 
 export function Form(props) {
   console.log(props.newQuiz)
