@@ -1,11 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as actionCreators from '../state/action-creators'
+import axios from 'axios';
 
 export function Form(props) {
+  console.log(props.newQuiz)
 
   const onChange = evt => {
-
+    props.inputChange({
+      [evt.target.id]: evt.target.value
+    })
   }
 
   const onSubmit = evt => {
@@ -23,4 +27,14 @@ export function Form(props) {
   )
 }
 
-export default connect(st => st, actionCreators)(Form)
+const mapStateToProps = (state) => {
+  return {
+    newQuiz: {
+      question_text: state.form.newQuestion,
+      true_answer_text: state.form.newTrueAnswer,
+      false_answer_text: state.form.newFalseAnswer }
+  }
+}
+
+
+export default connect(mapStateToProps, actionCreators)(Form)
