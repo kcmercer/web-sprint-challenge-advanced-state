@@ -20,7 +20,9 @@ export function wheelCounterClockwiseReset() {
 }
 
 // Quiz Actions
-export function selectAnswer() { }
+export function selectAnswer(answer) {
+  return(console.log(answer), {type: types.SET_SELECTED_ANSWER, payload: answer})
+}
 
 export function setMessage(value) {
   return ({type: types.SET_INFO_MESSAGE, payload: value})

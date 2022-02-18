@@ -18,10 +18,12 @@ export function Form(props) {
     }
   }
 
+  const quizQuestion = props.newQuiz.question_text
+
   const onSubmit = evt => {
     evt.preventDefault();
 
-    props.setMessage(props.newQuiz.question_text)
+    props.setMessage(quizQuestion)
     
     const newQuestion = document.querySelector('#newQuestion')
     const newTrueAnswer = document.querySelector('#newTrueAnswer')

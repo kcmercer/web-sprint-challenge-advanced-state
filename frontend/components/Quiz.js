@@ -1,37 +1,54 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { fetchQuiz } from '../state/action-creators';
+import { fetchQuiz, selectAnswer, setMessage } from '../state/action-creators';
 
 export function Quiz(props) {
   const grabQuiz = () => {
-    console.log(props.quiz)
     props.fetchQuiz()
   }
+
+  let quizCheck = props.quiz !== '';
+
+  const selectedAnswerArray = Object.values(props.selectedAnswer)
+  const selectedAnswerString = selectedAnswerArray.toString()
+
+  let answerCheck = selectedAnswerString !== '';
+
+  const handleSelect = evt => {
+    props.selectAnswer(evt.target.value)
+
+    if (selectedAnswerString == props.quiz.answers[0].text) {
+      props.setMessage('That is correct')
+    } else {
+      props.setMessage('That is a shame')
+    }
+  }
+
   return (
     <div id="wrapper">
       {
-        // quiz already in state? Let's use that, otherwise render "Loading next quiz..."
+        quizCheck ==
         true ? (
           <>
-            <h2>What is a closure?</h2>
+            <h2>{props.quiz.question}</h2>
 
             <div id="quizAnswers">
-              <div className="answer selected">
-                A function
-                <button>
-                  SELECTED
+              <div className={selectedAnswerString == props.quiz.answers[0].text ? 'answer selected' : 'answer'} value={props.quiz.answers[0].text}>
+              {props.quiz.answers[0].text}
+                <button value={props.quiz.answers[0].text} onClick={handleSelect}>
+                  {selectedAnswerString === props.quiz.answers[0].text ? 'SELECTED' : 'Select'}
                 </button>
               </div>
 
-              <div className="answer">
-                An elephant
-                <button>
-                  Select
+              <div className={selectedAnswerString === props.quiz.answers[1].text ? 'answer selected' : 'answer'} value={props.quiz.answers[1].text}>
+              {props.quiz.answers[1].text}
+                <button value={props.quiz.answers[1].text} onClick={handleSelect}>
+                {selectedAnswerString == props.quiz.answers[1].text ? 'SELECTED' : 'Select'}
                 </button>
               </div>
             </div>
 
-            <button  onClick={grabQuiz} id="submitAnswerBtn">Submit answer</button>
+            <button disabled={answerCheck === true ? false : true} onClick={grabQuiz} id="submitAnswerBtn">Submit answer</button>
           </>
         ) : 'Loading next quiz...'
       }
@@ -41,8 +58,9 @@ export function Quiz(props) {
 
 const mapStateToProps = (state) => {
   return {
-    quiz: state.quiz
+    quiz: state.quiz,
+    selectedAnswer: state.selectedAnswer
   }
 }
 
-export default connect(mapStateToProps, { fetchQuiz })(Quiz);
+export default connect(mapStateToProps, { fetchQuiz, selectAnswer, setMessage })(Quiz);

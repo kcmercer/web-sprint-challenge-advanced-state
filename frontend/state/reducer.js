@@ -37,20 +37,59 @@ function wheel(state = initialWheelState, action) {
   }
 }
 
-const initialQuizState = []
+const initialQuizState = {
+  quiz_id: 'LWKA',
+  question: 'What is Closure?',
+  answers: [
+    {
+      answer_id: '121fa',
+      text: 'A function',
+    },
+    {
+      answer_id: 'awdaw51',
+      text: 'An Elephant',
+    }
+  ]
+}
+
 function quiz(state = initialQuizState, action) {
   switch(action.type) {
     case types.SET_QUIZ_INTO_STATE:
-      return [...state, action.payload], console.log(state)
+      return {
+        quiz_id: action.payload.quiz_id,
+        question: action.payload.question,
+        answers: [
+          {
+            answer_id: action.payload.answers[0].answer_id,
+            text: action.payload.answers[0].text
+          },
+          {
+            answer_id: action.payload.answers[1].answer_id,
+            text: action.payload.answers[1].text
+          }
+        ]
+      }
 
     default:
       return state
   }
 }
 
-const initialSelectedAnswerState = null
+const initialSelectedAnswerState = {
+  selectedAnswer: ''
+}
+
 function selectedAnswer(state = initialSelectedAnswerState, action) {
-  return state
+  switch(action.type) {
+    case types.SET_SELECTED_ANSWER:
+      return {
+        ...state,
+        selectedAnswer: action.payload
+      }
+    
+    default:
+      return state
+  }
 }
 
 const initialMessageState = {
@@ -62,7 +101,7 @@ function infoMessage(state = initialMessageState, action) {
     case types.SET_INFO_MESSAGE:
       return {
         ...state,
-        message: action.payload + 'is a great question!'
+        message: action.payload
       }
 
     default:
@@ -84,17 +123,16 @@ function form(state = initialFormState, action) {
         ...state,
         newQuestion: action.payload
       }
-      case types.INPUT_CHANGE2:
-        return {
-          ...state,
-          newTrueAnswer: action.payload
-
-        }
-        case types.INPUT_CHANGE3:
-          return {
-            ...state,
-            newFalseAnswer: action.payload
-          }
+    case types.INPUT_CHANGE2:
+      return {
+        ...state,
+        newTrueAnswer: action.payload
+      }
+    case types.INPUT_CHANGE3:
+      return {
+        ...state,
+        newFalseAnswer: action.payload
+      }
     case types.RESET_FORM:
       return {
         ...state,
